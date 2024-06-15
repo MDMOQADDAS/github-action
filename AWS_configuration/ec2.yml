@@ -1,6 +1,6 @@
 ---
 - name: EC2
-  hosts: EC2
+  hosts: ec2
   tasks:
     - name: Ping the EC2
       ping:
