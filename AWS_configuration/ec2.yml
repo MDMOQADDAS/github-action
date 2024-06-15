@@ -1,6 +1,20 @@
 ---
 - name: EC2
   hosts: ec2
+  become: yes
   tasks:
-    - name: Ping the EC2
-      ping:
+    - name: Install the httpd
+      package:
+        name: httpd
+        state: present
+
+    - name: Configure httpd
+      copy:
+        content: "hello Moqaddas"
+        dest: /var/www/html/index.html
+
+    - name: Start and enable the httpd service
+      service:
+        name: httpd
+        state: started
+        enabled: yes
