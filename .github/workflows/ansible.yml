@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  run-ansible-play:
+  EC2_Ansible_Play:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
@@ -25,6 +25,10 @@ jobs:
         uses: webfactory/ssh-agent@v0.5.3
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      - name: Configure SSH to disable host key checking
+        run: |
+            mkdir -p ~/.ssh
+            echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
 
       - name: Setup Inventory File
         run: |
