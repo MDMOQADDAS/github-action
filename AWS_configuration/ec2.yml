@@ -18,3 +18,6 @@
         name: httpd
         state: started
         enabled: yes
+    - name: Address of web server
+      debug:
+        msg: "The web server is accessible at http://{{ ansible_host }}:80"
