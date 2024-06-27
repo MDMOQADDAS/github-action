@@ -35,7 +35,7 @@ jobs:
     eks_destroy:
         runs-on: ubuntu-latest
         needs: eks_create
-        if: github.actions.inputs.destroy == 'true'
+        if: github.event.inputs.destroy == 'true'
         steps:
             - name: "Checkout Code"
               uses: actions/checkout@v4
