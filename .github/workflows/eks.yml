@@ -20,3 +20,9 @@ jobs:
             - name: "Initializing the terrafrom"
               run: terraform init 
               working-directory: eks
+            - name: "Terrafrom plan"
+              run: terraform plan
+              working-directory: eks
+            - name: "Applying Terraform"
+              run: terrafrom apply --auto-approve
+              working-directory: eks
