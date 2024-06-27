@@ -24,5 +24,5 @@ jobs:
               run: terraform plan
               working-directory: eks
             - name: "Applying Terraform"
-              run: terrafrom apply --auto-approve
+              run: terraform apply --auto-approve
               working-directory: eks
