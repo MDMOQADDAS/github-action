@@ -1,5 +1,6 @@
 name: Control_Workflow
 on:
+    push:
     workflow_dispatch:
         inputs:
             env:
