@@ -27,8 +27,16 @@ jobs:
         steps:
             - name: Echo
               run: echo "dev"
+    
+    Build_Test:
+        if: github.event.inputs.env == 'test'
+        runs-on: ubuntu-latest
+        steps:
+            - name: Test
+              run: echo "test"
 
     Deploy_Test:
+        needs: [Build_Test]
         if: github.event.inputs.env == 'test'
         runs-on: ubuntu-latest
         steps:
