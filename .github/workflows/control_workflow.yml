@@ -42,3 +42,24 @@ jobs:
         steps:
             - name: Test
               run: echo "test"
+    Approval:
+        needs: [Deploy_Test]
+        runs-on: ubuntu-latest
+        if: github.event.inputs.env == 'test'
+        steps:
+            - name: Awaiting approval
+              run: echo "Awaiting manual approval"
+              env:
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            - name: Approval step
+              uses: hmarr/auto-approve-action@v2.0.0
+              with:
+                github-token: ${{ secrets.GITHUB_TOKEN }}
+
+    Post_Approval_Job1:
+        runs-on: ubuntu-latest
+        needs: [Approval]
+        if: github.event.inputs.env == 'test'
+        steps:
+            - name: Echo after approval
+              run: echo "Post approval job 1"
