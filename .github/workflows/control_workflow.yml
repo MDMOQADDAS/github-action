@@ -1,6 +1,6 @@
 name: Control_Workflow
 on:
-    push:
+    
     workflow_dispatch:
         inputs:
             env:
@@ -14,8 +14,15 @@ on:
                 
     
 jobs:
+    Build_Dev:
+        runs-on: ubuntu-latest
+        if: github.event.inputs.env == 'dev'
+        steps:
+            - name: Echo dev
+              run: echo "build dev"
     Deploy_Dev:
         runs-on: ubuntu-latest
+        needs: [Build_Dev]
         if: github.event.inputs.env == 'dev'
         steps:
             - name: Echo
