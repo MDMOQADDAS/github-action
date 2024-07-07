@@ -50,11 +50,11 @@ jobs:
             - name: Awaiting approval
               run: echo "Awaiting manual approval"
               env:
-                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                GITHUB_TOKEN: ${{ github.TOKEN }}
             - name: Approval step
               uses: hmarr/auto-approve-action@v2.0.0
               with:
-                github-token: ${{ secrets.GITHUB_TOKEN }}
+                github-token: ${{ github.TOKEN }}
 
     Post_Approval_Job1:
         runs-on: ubuntu-latest
