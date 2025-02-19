@@ -1,0 +1,15 @@
+name: Test Pipeline
+
+on: 
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run custom action
+        uses: ./.github/actions/test  # Reference the local action
