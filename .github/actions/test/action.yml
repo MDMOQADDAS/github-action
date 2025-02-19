@@ -1,0 +1,7 @@
+name: "Test action"
+description: "A custom GitHub Action"
+runs:
+  using: "composite"
+  steps:
+    - run: echo "Hello from ABC Dev Action!"
+      shell: bash
