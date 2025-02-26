@@ -16,40 +16,39 @@ jobs:
         with:
           fetch-depth: 0  # Required for GitVersion to access full git history
 
-      # Setup GitVersion
+      # Setup .NET (assuming you're using a .NET project)
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.0'  # Adjust based on your needs
+
+      # Install GitVersion
       - name: Install GitVersion
-        uses: gittools/actions/gitversion/setup@v3.1.11
-        with:
-          versionSpec: '6.0.0'  # Installs GitVersion 6.0.x
+        run: dotnet tool install --global GitVersion.Tool
 
-      # Execute GitVersion
-      - name: Execute GitVersion
+      # Calculate version
+      - name: Calculate version with GitVersion
         id: gitversion
-        uses: gittools/actions/gitversion/execute@v3.1.11
-        with:
-          useConfigFile: true  # Optional: Use GitVersion.yml if present
-          # Optional: configFilePath: 'customGitVersion.yml'
-
-      # Use the version in subsequent steps
-      - name: Display version information
         run: |
-          echo "FullSemVer: ${{ steps.gitversion.outputs.fullSemVer }}"
-          echo "Major: ${{ steps.gitversion.outputs.major }}"
-          echo "Minor: ${{ steps.gitversion.outputs.minor }}"
-          echo "Patch: ${{ steps.gitversion.outputs.patch }}"
-          echo "AssemblySemVer: ${{ steps.gitversion.outputs.assemblySemVer }}"
+          VERSION=$(dotnet-gitversion /output json)
+          echo "Calculated Version: $VERSION"
+          
+          # Extract specific version components
+          SEMVER=$(echo $VERSION | jq -r .SemVer)
+          MAJOR=$(echo $VERSION | jq -r .Major)
+          MINOR=$(echo $VERSION | jq -r .Minor)
+          PATCH=$(echo $VERSION | jq -r .Patch)
+          
+          # Set outputs for later steps
+          echo "version=$SEMVER" >> $GITHUB_OUTPUT
+          echo "major=$MAJOR" >> $GITHUB_OUTPUT
+          echo "minor=$MINOR" >> $GITHUB_OUTPUT
+          echo "patch=$PATCH" >> $GITHUB_OUTPUT
 
-      # Example: Build using the version
-      - name: Build
+      # Example: Use the version in subsequent steps
+      - name: Build with version
         run: |
-          echo "Building version ${{ steps.gitversion.outputs.fullSemVer }}"
-          # Add your build commands here
+          echo "Building version ${{ steps.gitversion.outputs.version }}"
+          # Add your build commands here, e.g.:
+          # dotnet build --configuration Release /p:Version=${{ steps.gitversion.outputs.version }}
 
-      # Optional: Create and push a git tag
-      # - name: Create and push tag
-      #   if: github.ref == 'refs/heads/main'
-      #   run: |
-      #     git tag v${{ steps.gitversion.outputs.fullSemVer }}
-      #     git push origin v${{ steps.gitversion.outputs.fullSemVer }}
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
