@@ -49,9 +49,9 @@ jobs:
       - name: Build with version
         run: |
           echo "Building version ${{ steps.gitversion.outputs.version }}"
-          echo "Major ${{ steps.gitversion.outputs.major }}
-          echo "Minor ${{ steps.gitversion.outputs.minor }}
-          echo "patch ${{ steps.gitversion.outputs.patch }}
+          echo "Major ${{ steps.gitversion.outputs.major }}"
+          echo "Minor ${{ steps.gitversion.outputs.minor }}"
+          echo "patch ${{ steps.gitversion.outputs.patch }}"
           # Add your build commands here, e.g.:
           # dotnet build --configuration Release /p:Version=${{ steps.gitversion.outputs.version }}
 
