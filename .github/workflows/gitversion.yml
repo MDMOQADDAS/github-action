@@ -1,0 +1,55 @@
+name: Build and Version
+
+on:
+  push:
+    branches:
+      - gitversion
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      # Checkout the repository code
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Required for GitVersion to access full git history
+
+      # Setup GitVersion
+      - name: Install GitVersion
+        uses: gittools/actions/gitversion/setup@v3.1.11
+        with:
+          versionSpec: '6.0.0'  # Installs GitVersion 6.0.x
+
+      # Execute GitVersion
+      - name: Execute GitVersion
+        id: gitversion
+        uses: gittools/actions/gitversion/execute@v3.1.11
+        with:
+          useConfigFile: true  # Optional: Use GitVersion.yml if present
+          # Optional: configFilePath: 'customGitVersion.yml'
+
+      # Use the version in subsequent steps
+      - name: Display version information
+        run: |
+          echo "FullSemVer: ${{ steps.gitversion.outputs.fullSemVer }}"
+          echo "Major: ${{ steps.gitversion.outputs.major }}"
+          echo "Minor: ${{ steps.gitversion.outputs.minor }}"
+          echo "Patch: ${{ steps.gitversion.outputs.patch }}"
+          echo "AssemblySemVer: ${{ steps.gitversion.outputs.assemblySemVer }}"
+
+      # Example: Build using the version
+      - name: Build
+        run: |
+          echo "Building version ${{ steps.gitversion.outputs.fullSemVer }}"
+          # Add your build commands here
+
+      # Optional: Create and push a git tag
+      # - name: Create and push tag
+      #   if: github.ref == 'refs/heads/main'
+      #   run: |
+      #     git tag v${{ steps.gitversion.outputs.fullSemVer }}
+      #     git push origin v${{ steps.gitversion.outputs.fullSemVer }}
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
