@@ -2,7 +2,7 @@ name: Build and Version
 
 on:
   workflow_dispatch:
-  push:
+  push: 
     branches:
       - gitversion
 
