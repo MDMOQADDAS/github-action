@@ -1,0 +1,9 @@
+mode: ContinuousDeployment
+next-version: 0.1.0  # Set this higher than your current version
+branches:
+  main:
+    tag: ''
+    increment: Patch
+  feature:
+    tag: beta
+    increment: Minor
